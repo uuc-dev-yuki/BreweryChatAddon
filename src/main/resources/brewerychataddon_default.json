@@ -1,0 +1,95 @@
+{
+  "enabled": true,
+  "language": "ukrainian",
+  "alcoholRules": [
+    {
+      "min": 0.0,
+      "max": 2.0,
+      "chance": 0,
+      "messages": []
+    },
+    {
+      "min": 2.0,
+      "max": 5.0,
+      "chance": 10,
+      "messages": {
+        "ukrainian": [
+          "я трішки під мухою",
+          "шо?",
+          "ага",
+          "угу",
+          "та ну"
+        ],
+        "english": [
+          "I'm a bit tipsy",
+          "huh?",
+          "yeah",
+          "uh-huh",
+          "no way"
+        ]
+      }
+    },
+    {
+      "min": 5.0,
+      "max": 10.0,
+      "chance": 25,
+      "messages": {
+        "ukrainian": [
+          "я не дуже розумію що відбувається",
+          "мені здається я вже підпив",
+          "я щось поплив",
+          "оце мене накрило",
+          "я забув що хотів сказати"
+        ],
+        "english": [
+          "I don't really get what's happening",
+          "I think I've had a drink",
+          "I'm kinda drifting",
+          "wow, it hit me",
+          "I forgot what I wanted to say"
+        ]
+      }
+    },
+    {
+      "min": 10.0,
+      "max": 20.0,
+      "chance": 40,
+      "messages": {
+        "ukrainian": [
+          "мені здається або я вже точно п'яний",
+          "я люблю вас усіх",
+          "я вас поважаю",
+          "все добре, все нормально",
+          "ой"
+        ],
+        "english": [
+          "I think I'm definitely drunk",
+          "I love you all",
+          "I respect you",
+          "it's okay, it's fine",
+          "oops"
+        ]
+      }
+    },
+    {
+      "min": 20.0,
+      "chance": 60,
+      "messages": {
+        "ukrainian": [
+          "я люблю вас усіх",
+          "я нічого не розумію",
+          "я тут?",
+          "я вже не можу",
+          "ха"
+        ],
+        "english": [
+          "I love you all",
+          "I don't understand anything",
+          "am I here?",
+          "I can't anymore",
+          "ha"
+        ]
+      }
+    }
+  ]
+}

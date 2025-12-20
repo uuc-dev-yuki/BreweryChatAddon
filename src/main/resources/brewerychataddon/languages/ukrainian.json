@@ -1,0 +1,6 @@
+{
+  "command.reload.success": "[BreweryChatAddon] Перезавантажено",
+  "log.loaded": "Завантажено (enabled={enabled}, language={language})",
+  "log.carbon.detected": "Знайдено Carbon Chat; очікую на hook entrypoint carbonchat",
+  "log.replaced": "Замінив чат від {player}: '{from}' -> '{to}'"
+}

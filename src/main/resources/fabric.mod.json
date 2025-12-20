@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "brewerychataddon",
+  "version": "${version}",
+  "name": "Brewery Chat Addon",
+  "description": "Chat distortion addon for Brewery",
+  "authors": ["UUC"],
+  "contact": {},
+  "license": "Custom",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "com.uuc.brewerychataddon.BreweryChatAddonMod"
+    ],
+    "carbonchat": [
+      "com.uuc.brewerychataddon.CarbonEntrypoint"
+    ]
+  },
+  "mixins": [
+    "brewerychataddon.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${min_loader_version}",
+    "minecraft": ">=1.21 <=1.21.11",
+    "fabric-api": "*",
+    "brewery": "*"
+  }
+}

@@ -1,0 +1,150 @@
+plugins {
+    id 'fabric-loom' version '1.14.6'
+    id 'maven-publish'
+}
+
+def fixedLoaderVersion = '0.18.2'
+
+if (gradle.startParameter.projectProperties.containsKey('loader_version')
+    && gradle.startParameter.projectProperties.get('loader_version').toString() != fixedLoaderVersion) {
+    throw new RuntimeException("This project is pinned to Fabric Loader ${fixedLoaderVersion}. Remove -Ploader_version or set it to ${fixedLoaderVersion}.")
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://maven.fabricmc.net/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${fixedLoaderVersion}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(Integer.parseInt(project.java_version as String))
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = Integer.parseInt(project.java_version as String)
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "loader_version", fixedLoaderVersion
+    inputs.property "min_loader_version", project.min_loader_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version, "loader_version": fixedLoaderVersion, "min_loader_version": project.min_loader_version
+    }
+}
+
+def releasesRoot = new File(rootDir.parentFile, "Releases")
+def stableReleaseDir = new File(releasesRoot, "BreweryChatAddon-${project.version}")
+
+def intermediateArtifactsDir = new File(buildDir, "tmp/intermediateArtifacts")
+def intermediateRawDir = new File(intermediateArtifactsDir, "raw")
+def intermediateRemappedDir = new File(intermediateArtifactsDir, "remapped")
+
+tasks.named('jar') {
+    destinationDirectory.set(intermediateRawDir)
+}
+
+tasks.named('sourcesJar') {
+    destinationDirectory.set(intermediateRawDir)
+}
+
+tasks.named('remapJar') {
+    destinationDirectory.set(intermediateRemappedDir)
+}
+
+tasks.named('remapSourcesJar') {
+    destinationDirectory.set(intermediateRemappedDir)
+}
+
+tasks.named('build') {
+    doFirst {
+        def libsDir = new File(buildDir, 'libs')
+        if (libsDir.exists()) {
+            libsDir.listFiles()?.each { f ->
+                if (f.isFile() && f.name.toLowerCase().endsWith('.jar')) {
+                    f.delete()
+                }
+            }
+        }
+    }
+
+    dependsOn tasks.named('remapJar')
+    dependsOn tasks.named('remapSourcesJar')
+    finalizedBy tasks.named('stableRelease')
+}
+
+tasks.register('stableRelease') {
+    group = 'distribution'
+    description = 'Builds the mod and copies artifacts into ../Releases/BreweryChatAddon-<version>/'
+
+    dependsOn tasks.named('remapJar')
+    dependsOn tasks.named('remapSourcesJar')
+
+    doLast {
+        stableReleaseDir.mkdirs()
+
+        def jarFile = tasks.named('remapJar').get().archiveFile.get().asFile
+        def sourcesFile = tasks.named('remapSourcesJar').get().archiveFile.get().asFile
+
+        if (file('README_UA.md').exists()) {
+            copy {
+                from file('README_UA.md')
+                into stableReleaseDir
+            }
+        }
+        if (file('README_EN.md').exists()) {
+            copy {
+                from file('README_EN.md')
+                into stableReleaseDir
+            }
+        }
+
+        copy {
+            from jarFile
+            into stableReleaseDir
+            rename { _ -> "brewerychataddon-${project.version}.jar" }
+        }
+
+        copy {
+            from sourcesFile
+            into stableReleaseDir
+            rename { _ -> "source-brewerychataddon-${project.version}.jar" }
+        }
+
+        def defaultConfig = file('src/main/resources/brewerychataddon_default.json')
+        if (defaultConfig.exists()) {
+            copy {
+                from defaultConfig
+                into stableReleaseDir
+                rename { _ -> 'config.json' }
+            }
+        }
+
+        def languagesDir = file('src/main/resources/brewerychataddon/languages')
+        if (languagesDir.exists()) {
+            copy {
+                from languagesDir
+                into new File(stableReleaseDir, 'languages')
+            }
+        }
+
+        println "[stableRelease] Output: ${stableReleaseDir}"
+    }
+}
