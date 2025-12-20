@@ -59,3 +59,12 @@
 Це аддон для моду **Brewery** від **Patbox (pb4)**:
 
 - https://modrinth.com/mod/brewery
+
+## About
+
+- Автор: **Yuki**
+- Власник: **ЄУК - Єдине Україномовне Ком'юніті**
+
+## License
+
+See: [LICENSE](LICENSE)

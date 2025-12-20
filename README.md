@@ -65,6 +65,11 @@ This is an addon for **Brewery** by **Patbox (pb4)**:
 
 - https://modrinth.com/mod/brewery
 
+## About
+
+- Author: **Yuki**
+- Owner: **ЄУК - Єдине Україномовне Ком'юніті**
+
 ## License
 
 See: [LICENSE](LICENSE)
