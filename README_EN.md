@@ -67,4 +67,4 @@ This is an addon for **Brewery** by **Patbox (pb4)**:
 
 ## License
 
-This project is released under the custom license in [`LICENSE`](LICENSE).
+See: [LICENSE](LICENSE)
